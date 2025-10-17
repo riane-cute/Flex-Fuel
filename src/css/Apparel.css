@@ -1,0 +1,53 @@
+/* src/css/Apparel.css */
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+
+/* keep the full-bleed black header you used on Home */
+.ff-header{ position:relative; }
+.ff-header::before{
+  content:""; position:absolute; inset:0; left:50%; transform:translateX(-50%);
+  width:100vw; background:#000; z-index:-1; border-bottom:1px solid #111;
+}
+
+/* tabs row */
+.prd-tabs-wrap{ background:#000; }
+.prd-tabs{ display:flex; gap:10px; padding:10px 0; align-items:center; }
+.prd-tab{
+  background:#161616; color:#fff; border:1px solid #2b2b2b;
+  padding:8px 14px; border-radius:6px; font-weight:800; letter-spacing:.04em;
+}
+.prd-tab.is-on{ background:#e10f0f; border-color:#e10f0f; }
+
+/* big red script titles */
+.script-title{
+  margin:22px 0 14px; font-family:"Kaushan Script", cursive;
+  font-size:36px; color:#e10f0f; font-weight:600;
+}
+.script-title span{ font-family:inherit; }
+.script-title.right{ text-align:right; }
+
+/* grid + responsiveness */
+.prd-main{ padding-bottom:28px; }
+.prd-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
+}
+@media (max-width: 1100px){ .prd-grid{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width: 780px){ .prd-grid{ grid-template-columns:repeat(2,1fr); } .script-title{ font-size:30px; } }
+@media (max-width: 480px){ .prd-grid{ grid-template-columns:1fr; } }
+
+/* cards */
+.prd-card{
+  background:#fff; border:1px solid #eceff3; border-radius:12px;
+  box-shadow:0 8px 20px rgba(16,24,40,.08); overflow:hidden; position:relative;
+}
+.prd-thumb{ height:190px; background-size:cover; background-position:center; }
+.prd-info{ padding:10px 12px 12px; }
+.prd-info h3{ margin:0 0 8px; font-size:14px; font-weight:800; letter-spacing:.02em; }
+.prd-meta{ display:flex; align-items:center; justify-content:space-between; }
+.price{ font-weight:800; }
+.btn-mini{ background:#e10f0f; color:#fff; border:0; border-radius:999px; font-weight:900; font-size:11px; padding:6px 12px; cursor:pointer; }
+
+/* badges */
+.badge{ position:absolute; top:10px; left:10px; font-size:11px; font-weight:900; color:#fff; padding:4px 8px; border-radius:999px; box-shadow:0 4px 10px rgba(0,0,0,.25); }
+.badge-hot{  background:#e10f0f; }
+.badge-new{  background:#111; }
+.badge-sale{ background:#ff8a00; }
