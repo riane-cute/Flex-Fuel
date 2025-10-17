@@ -116,7 +116,7 @@ export default function Equipments() {
 
       {/* HERO */}
       <section className="eq-hero">
-        <img src="/assets/equipmentBG.png" alt="Sport and Health" />
+       <img src={process.env.PUBLIC_URL + "/assets/equipmentBG.png"} alt="Sport and Health" />
         <div className="eq-hero-title">Sport and Health</div>
       </section>
 
