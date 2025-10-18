@@ -113,3 +113,33 @@
 .su-radio{
   display:flex; align-items:center; gap:8px; font-weight:700;
 }
+/* === PASSWORD VISIBILITY ICON === */
+.su-has-icon {
+  position: relative;
+}
+
+.su-eye {
+  position: absolute;
+  top: 38px; /* adjust if needed depending on input height */
+  right: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.su-eye img {
+  width: 22px;    /* reduce icon size */
+  height: 22px;   /* keep it consistent */
+  object-fit: contain;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.su-eye img:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
