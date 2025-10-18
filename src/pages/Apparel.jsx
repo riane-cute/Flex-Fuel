@@ -14,6 +14,7 @@ export default function Apparel() {
   const [openNav, setOpenNav] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const cartRef = useRef(null);
+  const [activeTab, setActiveTab] = useState("apparel");
 
   useEffect(() => { setCartCount(countItems(loadCart())); }, []);
 
@@ -96,13 +97,16 @@ export default function Apparel() {
         </div>
       </header>
 
-      <section className="sup-tabs-wrap">
-        <div className="ff-container sup-tabs">
-          <Link className="sup-tab is-on" to="/apparel">APPAREL</Link>
-          <Link className="sup-tab"        to="/supplements">SUPPLEMENTS</Link>
-          <Link className="sup-tab"        to="/equipments">EQUIPMENTS</Link>
-        </div>
-      </section>
+     <section className="sup-tabs-wrap">
+      <div className="ff-container sup-tabs">
+        <Link className={`sup-tab ${activeTab === "apparel" ? "is-active" : ""}`} to="/apparel" onClick={() => setActiveTab("apparel")}>
+          APPAREL </Link> 
+        <Link className={`sup-tab ${activeTab === "supplements" ? "is-active" : ""}`} to="/supplements" onClick={() => setActiveTab("supplements")}>
+          SUPPLEMENTS </Link>
+        <Link className={`sup-tab ${activeTab === "equipments" ? "is-active" : ""}`} to="/equipments" onClick={() => setActiveTab("equipments")}>
+          EQUIPMENTS</Link>
+      </div>
+     </section>
 
       {/* MEN */}
       <main className="ff-container">
