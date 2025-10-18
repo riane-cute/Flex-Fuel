@@ -42,12 +42,8 @@ export default function Login() {
               minLength={6}
               required
             />
-            <button
-              type="button"
-              className="su-eye"
-              onClick={()=>setShowPw(v=>!v)}
-              aria-label="Toggle password visibility"
-            >{showPw ? "🙈" : "👁️"}</button>
+            <button type="button" className="su-eye" onClick={() => setShowPw(v => !v)} aria-label="Toggle password visibility">
+            <img src={process.env.PUBLIC_URL + (showPw ? "/assets/hide.png" : "/assets/eye.png")} alt={showPw ? "Hide password" : "Show password"}/> </button>
           </div>
 
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"6px 0 10px"}}>
