@@ -52,3 +52,24 @@
 .sup-title{ margin:8px 0 6px; font-size:14px; font-weight:800; }
 .sup-price{ font-size:13px; font-weight:700; margin-bottom:8px; }
 .sup-add{ display:inline-flex; align-items:center; gap:6px; background:#e10f0f; color:#fff; border:0; border-radius:999px; padding:6px 14px; font-weight:900; font-size:11px; cursor:pointer; }
+.sup-tab {
+  background: transparent;
+  border: 2px solid #e10f0f;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.sup-tab:hover {
+  background: #e10f0f;
+  color: #fff;
+}
+
+.sup-tab.is-active {
+  background: #e10f0f;
+  color: #fff;
+  border-color: #e10f0f;
+}
