@@ -138,7 +138,7 @@ export default function Apparel() {
 
           <article className="sup-card">
             <span className="sup-badge sup-badge-sale">SALE</span>
-            <img className="sup-thumb" src="/assets/sleevelessTank.png" alt="Sleeveless Pack" />
+             <img className="sup-thumb" src={process.env.PUBLIC_URL + "/assets/SleevelessTank.png"}alt="Sleeveless Pack"/>
             <div className="sup-info">
               <h3 className="sup-title">Sleeveless Pack</h3>
               <div className="sup-price">₱799</div>
