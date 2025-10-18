@@ -2,8 +2,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/Home.css";
-import "../css/Equipments.css";   // your hero + scroller + grid
-import "../css/Supplements.css";  // reuses card/grid + animation classes
+import "../css/Equipments.css";   
+import "../css/Supplements.css";  
+
+
 
 const CART_KEY = "ff_cart";
 const loadCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); } catch { return []; } };
@@ -15,6 +17,8 @@ export default function Equipments() {
   const railRef = useRef(null);
   const cartRef = useRef(null);
   const [cartCount, setCartCount] = useState(0);
+  const [activeTab, setActiveTab] = useState("equipments");
+
 
   useEffect(() => { setCartCount(countItems(loadCart())); }, []);
 
@@ -105,18 +109,22 @@ export default function Equipments() {
         </div>
       </header>
 
-      {/* TABS */}
       <section className="sup-tabs-wrap">
         <div className="ff-container sup-tabs">
-          <Link className="sup-tab"       to="/apparel">APPAREL</Link>
-          <Link className="sup-tab"       to="/supplements">SUPPLEMENTS</Link>
-          <Link className="sup-tab is-on" to="/equipments">EQUIPMENTS</Link>
+          <Link className={`sup-tab ${activeTab === "apparel" ? "is-active" : ""}`} to="/apparel" onClick={() => setActiveTab("apparel")}>
+           APPAREL </Link>
+           <Link className={`sup-tab ${activeTab === "supplements" ? "is-active" : ""}`} to="/supplements" onClick={() => setActiveTab("supplements")}>
+           SUPPLEMENTS </Link>
+           
+          <Link className={`sup-tab ${activeTab === "equipments" ? "is-active" : ""}`} to="/equipments" onClick={() => setActiveTab("equipments")}>
+          EQUIPMENTS</Link>
         </div>
       </section>
 
+
       {/* HERO */}
       <section className="eq-hero">
-       <img src={process.env.PUBLIC_URL + "/assets/equipmentBG.png"} alt="Sport and Health" />
+       <img src={process.env.PUBLIC_URL + "/assets/EquipmentBg.png"} alt="Sport and Health" />
         <div className="eq-hero-title">Sport and Health</div>
       </section>
 
