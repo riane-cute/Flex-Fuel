@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import "../css/Home.css";
 import "../css/Supplements.css";
 
+
+
+
 const CART_KEY = "ff_cart";
 const loadCart = () => {
   try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
@@ -15,8 +18,8 @@ const countItems = (cart) => cart.reduce((n, it) => n + (it.qty || 0), 0);
 export default function Supplements() {
   const [openNav, setOpenNav] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const cartRef = useRef(null);           // ref to cart icon (for animation target)
-
+  const cartRef = useRef(null);          
+  const [activeTab, setActiveTab] = useState("supplements");
   useEffect(() => {
     setCartCount(countItems(loadCart()));
   }, []);
@@ -120,13 +123,15 @@ export default function Supplements() {
       
       <section className="sup-tabs-wrap">
         <div className="ff-container sup-tabs">
-          <Link className="sup-tab" to="/apparel">APPAREL</Link>
-          <Link className="sup-tab is-on" to="/supplements">SUPPLEMENTS</Link>
-          <Link className="sup-tab" to="/equipments">EQUIPMENTS</Link>
+          <Link className={`sup-tab ${activeTab === "apparel" ? "is-active" : ""}`} to="/apparel" onClick={() => setActiveTab("apparel")}>
+           APPAREL </Link> 
+          <Link className={`sup-tab ${activeTab === "supplements" ? "is-active" : ""}`} to="/supplements" onClick={() => setActiveTab("supplements")}>
+          SUPPLEMENTS </Link>
+          <Link className={`sup-tab ${activeTab === "equipments" ? "is-active" : ""}`} to="/equipments" onClick={() => setActiveTab("equipments")}>
+          EQUIPMENTS</Link>
         </div>
       </section>
-
-      {/* ===== BANNERS ===== */}
+      
       <section className="ff-container sup-banners">
         <img className="sup-banner" src="/assets/banner1.png"  alt="Supplements promo left" />
         <img className="sup-banner" src="/assets/banner2.png" alt="Supplements promo right" />
