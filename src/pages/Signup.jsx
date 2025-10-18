@@ -57,10 +57,7 @@ export default function Signup() {
 
           <div className="su-avatar">
             <div className="su-avatar-ring">
-              <img
-                src={avatar || "/assets/account/avatar-placeholder.jpg"}
-                alt="Profile"
-              />
+              <img src={avatar || process.env.PUBLIC_URL + "/assets/Profiles.jpg"}alt="Default profile" className="su-avatar-img"/>
             </div>
             <label className="su-upload">
               <input type="file" accept="image/*" onChange={handleAvatar} />
@@ -114,43 +111,22 @@ export default function Signup() {
               <input id="postal" name="postal" type="text" />
             </div>
           </div>
-
-          <div className="su-row">
-            <div className="su-field su-has-icon">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                name="password"
-                type={showPw ? "text" : "password"}
-                minLength={6}
-                required
-              />
-              <button
-                type="button"
-                className="su-eye"
-                onClick={()=>setShowPw(v=>!v)}
-                aria-label="Toggle password visibility"
-              >{showPw ? "🙈" : "👁️"}</button>
-            </div>
-
+          
+          <div className="su-field su-has-icon">\
+            <label htmlFor="password">Password</label>
+            <input id="password" name="password" type={showPw ? "text" : "password"} minLength={6} required/>
+             <button type="button" className="su-eye" onClick={() => setShowPw(v => !v)} aria-label="Toggle password visibility">
+            
+            <img src={process.env.PUBLIC_URL + (showPw ? "/assets/hide.png" : "/assets/eye.png")} alt={showPw ? "Hide password" : "Show password"}/> </button></div>
+            
             <div className="su-field su-has-icon">
               <label htmlFor="confirm">Confirm password</label>
-              <input
-                id="confirm"
-                name="confirm"
-                type={showPw2 ? "text" : "password"}
-                minLength={6}
-                required
-              />
-              <button
-                type="button"
-                className="su-eye"
-                onClick={()=>setShowPw2(v=>!v)}
-                aria-label="Toggle confirm password visibility"
-              >{showPw2 ? "🙈" : "👁️"}</button>
-            </div>
+              <input id="confirm" name="confirm" type={showPw2 ? "text" : "password"} minLength={6} required/>
+             <button type="button" className="su-eye" onClick={() => setShowPw2(v => !v)} aria-label="Toggle confirm password visibility">
+            <img src={process.env.PUBLIC_URL + (showPw2 ? "/assets/hide.png" : "/assets/eye.png")}alt={showPw2 ? "Hide password" : "Show password"} />
+            </button>
           </div>
-
+          
           <label className="su-check">
             <input type="checkbox" required />
             I agree to the <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.
