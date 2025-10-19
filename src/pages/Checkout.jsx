@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Home.css";
 import "../css/Checkout.css";
 
@@ -19,14 +19,15 @@ const loadCoupon = () => {
 
 const peso = (n) => "₱ " + Number(n || 0).toLocaleString("en-PH", { maximumFractionDigits: 0 });
 
-
 const VOUCHERS = {
-  FF10:  { code: "FF10", type: "percent", value: 10, label: "10% off (sitewide)" },
-  LESS50: { code: "LESS50", type: "flat",    value: 50, label: "₱50 off (min ₱500)", minSubtotal: 500 },
-  FREESHIP:{ code: "FREESHIP", type: "freeship", label: "Free Shipping" },
+  FF10:    { code: "FF10",    type: "percent", value: 10,  label: "10% off (sitewide)" },
+  LESS50:  { code: "LESS50",  type: "flat",    value: 50,  label: "₱50 off (min ₱500)", minSubtotal: 500 },
+  FREESHIP:{ code: "FREESHIP",type: "freeship",            label: "Free Shipping" },
 };
 
 export default function Checkout() {
+  const navigate = useNavigate();
+
   const [cart, setCart] = useState([]);
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -41,7 +42,7 @@ export default function Checkout() {
   const updateQty = (index, delta) => {
     setCart((prev) => {
       const next = [...prev];
-      next[index].qty = Math.max(1, next[index].qty + delta);
+      next[index].qty = Math.max(1, (next[index].qty || 1) + delta);
       saveCart(next);
       return next;
     });
@@ -56,7 +57,7 @@ export default function Checkout() {
   };
 
   const cartSubtotal = useMemo(
-    () => cart.reduce((sum, it) => sum + it.price * it.qty, 0),
+    () => cart.reduce((sum, it) => sum + (it.price || 0) * (it.qty || 1), 0),
     [cart]
   );
 
@@ -67,28 +68,21 @@ export default function Checkout() {
     }
     if (appliedCoupon.type === "flat") {
       const amt = appliedCoupon.value || 0;
-      return Math.min(amt, cartSubtotal); 
+      return Math.min(amt, cartSubtotal);
     }
     return 0;
   }, [appliedCoupon, cartSubtotal]);
 
-
   const baseShipping = cart.length ? 80 : 0;
   const shipping = appliedCoupon?.type === "freeship" ? 0 : baseShipping;
-
   const orderTotal = Math.max(0, cartSubtotal - discountAmount) + shipping;
 
   const applyVoucher = (rawCode) => {
     const code = (rawCode || "").trim().toUpperCase();
     const v = VOUCHERS[code];
-    if (!code) {
-      setCouponMsg({ type: "err", text: "Enter a voucher code." });
-      return;
-    }
-    if (!v) {
-      setCouponMsg({ type: "err", text: "Invalid voucher code." });
-      return;
-    }
+
+    if (!code) { setCouponMsg({ type: "err", text: "Enter a voucher code." }); return; }
+    if (!v)     { setCouponMsg({ type: "err", text: "Invalid voucher code." }); return; }
 
     if (v.minSubtotal && cartSubtotal < v.minSubtotal) {
       setCouponMsg({
@@ -97,6 +91,7 @@ export default function Checkout() {
       });
       return;
     }
+
     setAppliedCoupon(v);
     saveCoupon(v);
     setCouponMsg({ type: "ok", text: `Applied: ${v.label}` });
@@ -110,9 +105,31 @@ export default function Checkout() {
 
   const quickApply10 = () => applyVoucher("FF10");
 
+  // === Proceed to Review ===
+  const proceedToCheckout = () => {
+    if (!cart.length) { alert("Your cart is empty."); return; }
+
+    const payload = {
+      items: cart.map(it => ({
+        id: it.id, title: it.title, price: it.price, qty: it.qty || 1, img: it.img
+      })),
+      coupon: appliedCoupon || null,
+      summary: {
+        subtotal: cartSubtotal,
+        discount: discountAmount,
+        shipping,
+        total: orderTotal,
+      },
+      createdAt: Date.now(),
+    };
+
+    localStorage.setItem("ff_checkout", JSON.stringify(payload));
+    navigate("/checkout/review");
+  };
+
   return (
     <div className="ff-home">
-      
+      {/* Topbar */}
       <div className="ff-topbar">
         <div className="ff-container ff-topbar-inner">
           <button className="ff-burger" aria-label="Toggle menu">
@@ -128,23 +145,26 @@ export default function Checkout() {
         </div>
       </div>
 
-
+      {/* Header */}
       <header className="ff-header ff-container">
         <img className="ff-logo" src="/assets/logo.png" alt="Flex & Fuel" />
         <div className="ff-search">
           <input type="text" placeholder="Search..." />
-           <button type="button" className="ff-icon" aria-label="Search">
-            <img src="/assets/searchButton.png" alt="" className="ff-icon-img" /></button>
+          <button type="button" className="ff-icon" aria-label="Search">
+            <img src="/assets/searchButton.png" alt="" className="ff-icon-img" />
+          </button>
           <button type="button" className="ff-icon" aria-label="Cart">
-            <img src="/assets/cartButton.png" alt="" className="ff-icon-img" /></button>
+            <img src="/assets/cartButton.png" alt="" className="ff-icon-img" />
+          </button>
         </div>
       </header>
 
+      {/* Page heading */}
       <div className="ff-container ck-heading-wrap">
         <h1 className="ck-heading">Shopping <span>Cart</span></h1>
       </div>
 
-
+      {/* Cart table */}
       <section className="ff-container ck-panel">
         {!cart.length ? (
           <div className="ck-empty">
@@ -161,7 +181,7 @@ export default function Checkout() {
             </div>
 
             {cart.map((item, idx) => (
-              <div className="ck-row" key={item.id}>
+              <div className="ck-row" key={item.id ?? idx}>
                 <div className="ck-prod">
                   <img src={item.img} alt={item.title} />
                   <div className="ck-prod-name">
@@ -175,18 +195,20 @@ export default function Checkout() {
                   <span>{item.qty}</span>
                   <button onClick={() => updateQty(idx, +1)}>+</button>
                 </div>
-                <div className="ck-total">{peso(item.price * item.qty)}</div>
+                <div className="ck-total">{peso((item.price || 0) * (item.qty || 1))}</div>
               </div>
             ))}
 
             <div className="ck-cta-right">
-              <button className="ck-checkout">Proceed to Checkout</button>
+              <button className="ck-checkout" onClick={proceedToCheckout}>
+                Proceed to Checkout
+              </button>
             </div>
           </div>
         )}
       </section>
 
-      
+      {/* Bottom: coupon / shipping / totals */}
       <section className="ff-container ck-bottom">
         {/* Coupon */}
         <div className="ck-card">
@@ -207,20 +229,18 @@ export default function Checkout() {
             )}
           </div>
 
-          {/* status message */}
           {couponMsg.text && (
             <div className={`ck-voucher-msg ${couponMsg.type === "ok" ? "ok" : "err"}`}>
               {couponMsg.text}
             </div>
           )}
 
-          {/* clickable sticker -> auto-apply FF10 */}
           <button type="button" className="ck-sticker" onClick={quickApply10}>
             GET VOUCHER 10% OFF
           </button>
         </div>
 
-        {/* Shipping calc (placeholder) */}
+        {/* Shipping (placeholder) */}
         <div className="ck-card">
           <h4>Calculate Shipping</h4>
           <input className="ck-input" type="text" placeholder="Province*" />
