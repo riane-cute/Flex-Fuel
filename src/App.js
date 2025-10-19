@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Contacts from "./pages/Contacts";
 import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
+import CheckoutReview from "./pages/CheckoutReview";
 
 const Placeholder = ({ title }) => (
   <div style={{ padding: 24 }}>{title} page</div>
@@ -26,6 +27,8 @@ export default function App() {
       <Route path="/contacts" element={<Contacts />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/checkout/review" element={<CheckoutReview/>} />
+      
     </Routes>
   );
 }
